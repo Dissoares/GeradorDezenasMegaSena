@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sorteio Mega-Sena</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(10, 40px);
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+        transition: filter 0.3s ease;
+        /* Transição suave para o desfoque */
+      }
+
+      .grid.blur {
+        filter: blur(8px);
+        /* Efeito de desfoque */
+      }
+
+      .number {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      .number.active {
+        background-color: #ffe680;
+        transform: scale(1.2);
+      }
+
+      .number.marked {
+        background-color: #4caf50;
+        color: white;
+        transform: scale(1);
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      /* Estilização do modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        z-index: 1000;
+      }
+
+      .modal .dezena.blurred {
+        filter: blur(5px);
+        opacity: 0.7;
+      }
+
+      .modal .dezena {
+        display: inline-block;
+        font-size: 24px;
+        font-weight: bold;
+        color: #4caf50;
+        margin: 5px;
+        animation: bounce 0.6s ease infinite;
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      /* Animação bounce */
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+
+        40% {
+          transform: translateY(-20px);
+        }
+
+        60% {
+          transform: translateY(-10px);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Sorteio Mega-Sena</h1>
+    <div class="grid" id="grid"></div>
+    <button id="sorteioButton">Sortear</button>
+
+    <!-- Modal e Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Modal com botão "Compartilhar para Revelar" -->
+    <div class="modal" id="modal">
+      <h2>Dezenas Sorteadas</h2>
+      <p>Compartilhe no WhatsApp para liberar as dezenas!</p>
+      <div id="dezenas"></div>
+      <button id="shareButton">Compartilhar no WhatsApp</button>
+    </div>
+
+    <script>
+      const compartilharParaLiberar = () => {
+        // Texto que será enviado no WhatsApp
+        const whatsappMessage = encodeURIComponent(
+          "Descubra os números sorteados na Mega-Sena! Clique no link para brincar: [SEU LINK AQUI]"
+        );
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
+
+        // Abrir link de compartilhamento no WhatsApp
+        window.open(whatsappUrl, "_blank");
+
+        // Após um pequeno atraso, liberar os números
+        setTimeout(() => {
+          alert(
+            "Após compartilhar, as dezenas serão reveladas! Verifique se o compartilhamento foi feito com sucesso."
+          );
+          // Remover o desfoque das dezenas
+          document
+            .querySelectorAll(".modal .dezena.blurred")
+            .forEach((dezena) => {
+              dezena.classList.remove("blurred");
+            });
+        }, 3000); // Tempo para simular o compartilhamento
+      };
+
+      document
+        .getElementById("shareButton")
+        .addEventListener("click", compartilharParaLiberar);
+    </script>
+
+    <script>
+      // Carregar os sons
+      const seletorAudio = new Audio("./moeda.mp3"); // Som do seletor
+      const marcadoAudio = new Audio("./diamante.mp3"); // Som da marcação
+      const modalAudio = new Audio("./ganho.mp3"); // Som ao exibir o modal
+
+      // Função para preencher a cartela de números
+      const grid = document.getElementById("grid");
+      for (let i = 1; i <= 60; i++) {
+        const number = document.createElement("div");
+        number.textContent = i.toString().padStart(2, "0");
+        number.classList.add("number");
+        grid.appendChild(number);
+      }
+
+      const numbers = Array.from(document.querySelectorAll(".number"));
+      const sorteioButton = document.getElementById("sorteioButton");
+      let sorteados = [];
+
+      // Função para sortear uma dezena
+      const sortearDezena = () => {
+        return Math.floor(Math.random() * 60) + 1;
+      };
+
+      // Função para realizar o efeito de seleção aleatória
+      const animarSelecao = (numeroSorteado) => {
+        return new Promise((resolve) => {
+          let contador = 0;
+          const intervalo = setInterval(() => {
+            // Limpar o estado "active" dos números
+            numbers.forEach((num) => num.classList.remove("active"));
+
+            // Selecionar um número aleatório
+            const randomIndex = Math.floor(Math.random() * 60);
+            numbers[randomIndex].classList.add("active");
+
+            // Reproduzir o som do seletor
+            seletorAudio.currentTime = 0; // Reinicia o áudio
+            seletorAudio.play();
+
+            contador++;
+            if (contador > 20) {
+              clearInterval(intervalo);
+
+              // Marcar o número sorteado
+              const finalNumber = numbers.find(
+                (num) => parseInt(num.textContent) === numeroSorteado
+              );
+              finalNumber.classList.remove("active");
+              finalNumber.classList.add("marked");
+
+              marcadoAudio.currentTime = 0; // Reinicia o áudio
+              marcadoAudio.play();
+              // Reproduzir o som da marcação
+
+              resolve();
+            }
+          }, 50);
+        });
+      };
+
+      // Função para exibir o modal com as dezenas sorteadas
+      const exibirModal = () => {
+        const overlay = document.getElementById("overlay");
+        const modal = document.getElementById("modal");
+        const dezenasContainer = document.getElementById("dezenas");
+
+        dezenasContainer.innerHTML = "";
+        sorteados.forEach((dezena, index) => {
+          const div = document.createElement("div");
+          div.textContent = dezena.toString().padStart(2, "0");
+          div.classList.add("dezena");
+
+          // Adicionar a classe blurred para as 3 últimas dezenas
+          if (index >= sorteados.length - 3) {
+            div.classList.add("blurred");
+          }
+
+          dezenasContainer.appendChild(div);
+        });
+
+        overlay.style.display = "block";
+        modal.style.display = "block";
+
+        // Reproduzir som do modal
+        modalAudio.play();
+      };
+
+      // Função para fechar o modal
+      const fecharModal = () => {
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("modal").style.display = "none";
+        grid.classList.remove("blur"); // Remover desfoque ao fechar
+      };
+
+      // Função principal para sortear os números
+      const sortear = async () => {
+        if (sorteados.length >= 6) return;
+
+        sorteioButton.disabled = true;
+
+        while (sorteados.length < 6) {
+          let numero;
+          do {
+            numero = sortearDezena();
+          } while (sorteados.includes(numero));
+
+          sorteados.push(numero);
+          sorteados.sort((a, b) => a - b);
+
+          await animarSelecao(numero);
+        }
+
+        grid.classList.add("blur"); // Adicionar desfoque
+        setTimeout(() => exibirModal(), 500); // Esperar um pouco antes de exibir o modal
+
+        sorteioButton.disabled = false;
+      };
+
+      // Eventos
+      sorteioButton.addEventListener("click", sortear);
+      document.getElementById("closeModal").addEventListener("click", fecharModal);
+      document.getElementById("overlay").addEventListener("click", fecharModal);
+    </script>
+  </body>
+</html>
