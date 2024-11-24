@@ -187,8 +187,8 @@
     <div class="overlay" id="overlay"></div>
 
     <div class="modal" id="modal">
-      <h2>Dezenas Sorteadas</h2>
-      <p>Compartilhe no WhatsApp para liberar as dezenas!</p>
+      <h2 id="h2">Dezenas Sorteadas</h2>
+      <p id="frase">Compartilhe no WhatsApp para liberar as dezenas!</p>
       <div id="dezenas"></div>
       <button id="shareButton">Compartilhar no WhatsApp</button>
     </div>
@@ -196,7 +196,9 @@
     <script>
       const coinsAudio = new Audio("./coins.mp3");
       const audioFogos = new Audio("./fogos.mp3");
+
       let sharedCount = 0;
+      let fogosInterval = null;
 
       const metodoFogos = () => {
         const canvas = document.createElement("canvas");
@@ -273,7 +275,7 @@
           });
 
           if (fireworks.length === 0) {
-            document.body.removeChild(canvas); 
+            document.body.removeChild(canvas);
           } else {
             requestAnimationFrame(animate);
           }
@@ -311,12 +313,49 @@
 
           if (sharedCount >= blurredDezenas.length) {
             sharedCount = 0;
+
+            const shareButton = document.getElementById("shareButton");
+            shareButton.disabled = true;
+            shareButton.style.display = "none";
+
+            const titulo = document.getElementById("h2");
+            titulo.textContent = "Boa Sorte!🍀";
+
+            const frases = document.getElementById("frase");
+            frases.textContent = "Compartilhamento Concluído!";
+
+            const copyButton = document.createElement("button");
+            copyButton.textContent = "Copiar Dezenas";
+            copyButton.classList.add("copy-btn");
+            copyButton.style.marginTop = "10px";
+            document.querySelector(".modal").appendChild(copyButton);
+
+            copyButton.addEventListener("click", () => {
+              const dezenas = Array.from(
+                document.querySelectorAll(".modal .dezena")
+              ).map((dezena) => dezena.textContent.trim());
+              const dezenasString = dezenas.join(", ");
+              navigator.clipboard
+                .writeText(dezenasString)
+                .then(() => (copyButton.textContent = "😃 Copiado com sucesso!"))
+                .catch(() => alert("😖 Erro ao copiar dezenas."));
+            });
+
+            if (!fogosInterval) {
+              fogosInterval = setInterval(() => {
+                metodoFogos();
+                audioFogos.currentTime = 0;
+                audioFogos.play();
+              }, 2000);
+            }
           }
+        }
+      };
 
-          metodoFogos();
-          audioFogos.currentTime = 0;
-          audioFogos.play();
-
+      const pararFogos = () => {
+        if (fogosInterval) {
+          clearInterval(fogosInterval);
+          fogosInterval = null;
         }
       };
 
