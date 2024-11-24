@@ -283,7 +283,9 @@
     </div>
 
     <button id="sorteioButton"><i class="fas fa-sync-alt"></i> Sortear</button>
-
+    <button id="shareButtonAllSocials">
+      <i class="fa-solid fa-up-right-from-square"></i> Compartilhar
+    </button>
     <div class="overlay" id="overlay"></div>
 
     <div class="modal" id="modal">
@@ -291,11 +293,23 @@
       <p id="frase">Compartilhe para revelar as dezenas!</p>
       <div id="dezenas"></div>
       <button id="shareButton">
-        <i class="fa-brands fa-whatsapp"></i> Compartilhar
+        <i class="fa-solid fa-eye-slash"></i> Revelar dezenas ocultas
       </button>
     </div>
 
     <script>
+      document
+        .getElementById("shareButtonAllSocials")
+        .addEventListener("click", function () {
+          const currentUrl = window.location.href;
+
+          const socialShareUrl = `https://www.addtoany.com/share#url=${encodeURIComponent(
+            currentUrl
+          )}`;
+
+          window.open(socialShareUrl, "share", "width=600,height=400");
+        });
+
       const coinsAudio = new Audio("./coins.mp3");
       const audioFogos = new Audio("./fogos.mp3");
 
@@ -415,10 +429,13 @@
             let botaoCompartilhar = document.getElementById("shareButton");
 
             if (blurredDezenas.length == 3) {
-              botaoCompartilhar.textContent = "😄 Falta pouco!";
+              botaoCompartilhar.innerHTML =
+                '<i class="fa-brands fa-whatsapp"></i> Compartilhar';
             }
+
             if (blurredDezenas.length == 2) {
-              botaoCompartilhar.textContent = "😁 Só mais uma vez!";
+              botaoCompartilhar.innerHTML =
+                '<i class="fa-brands fa-whatsapp"></i> Só mais uma vez!';
             }
           }, 1000);
 
@@ -436,7 +453,7 @@
             frases.textContent = "Compartilhamento Concluído!";
 
             const copyButton = document.createElement("button");
-            copyButton.textContent = "Copiar Dezenas";
+            copyButton.innerHTML ='<i class="fas fa-copy"></i> Copiar Dezenas';
             copyButton.classList.add("copy-btn");
             copyButton.style.marginTop = "10px";
             document.querySelector(".modal").appendChild(copyButton);
@@ -449,7 +466,7 @@
               navigator.clipboard
                 .writeText(dezenasString)
                 .then(() => {
-                  copyButton.textContent = "😃 Copiado com sucesso!..";
+                  copyButton.innerHTML ='<i class="fas fa-check-double"></i> Copiado com sucesso!.. 😃';
                 })
                 .catch(() => alert("😖 Erro ao copiar dezenas."));
             });
@@ -659,7 +676,6 @@
           let numero;
           do {
             numero = sortearDezena();
-            console.log("💡 => sortear => numero:", numero);
           } while (sorteados.includes(numero));
 
           sorteados.push(numero);
