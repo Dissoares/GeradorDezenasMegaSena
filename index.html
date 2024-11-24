@@ -3,6 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      property="og:title"
+      content="Descubra os números sorteados na Mega-Sena!"
+    />
+    <meta
+      property="og:description"
+      content="Participe do sorteio e descubra os números da sorte. Clique para desbloquear!"
+    />
+    <meta property="og:image" content="https://example.com/imagem.jpg" />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mega-Sena Sorteios" />
+
     <title>Sorteio Mega-Sena</title>
     <style>
       body {
@@ -64,7 +77,6 @@
         background-color: #45a049;
       }
 
-      /* Modal Styling */
       .modal {
         display: none;
         position: fixed;
@@ -80,7 +92,6 @@
         animation: fadeIn 0.4s ease-in-out;
       }
 
-      /* Modal overlay */
       .overlay {
         display: none;
         position: fixed;
@@ -92,7 +103,6 @@
         z-index: 999;
       }
 
-      /* Modal Content */
       .modal h2 {
         font-size: 28px;
         color: #333;
@@ -137,19 +147,18 @@
         background-color: #45a049;
       }
 
-      /* Modal fade-in animation */
       @keyframes fadeIn {
         from {
           opacity: 0;
           transform: translate(-50%, -45%);
         }
+
         to {
           opacity: 1;
           transform: translate(-50%, -50%);
         }
       }
 
-      /* Bounce Animation for Dezenas */
       @keyframes bounce {
         0%,
         20%,
@@ -175,10 +184,8 @@
     <div class="grid" id="grid"></div>
     <button id="sorteioButton">Sortear</button>
 
-    <!-- Modal and Overlay -->
     <div class="overlay" id="overlay"></div>
 
-    <!-- Modal with Share Button -->
     <div class="modal" id="modal">
       <h2>Dezenas Sorteadas</h2>
       <p>Compartilhe no WhatsApp para liberar as dezenas!</p>
@@ -187,35 +194,40 @@
     </div>
 
     <script>
+      let sharedCount = 0;
+
       const compartilharParaLiberar = () => {
+        const domain = window.location.origin;
         const whatsappMessage = encodeURIComponent(
-          "Descubra os números sorteados na Mega-Sena! Clique no link para brincar: [SEU LINK AQUI]"
+          `Descubra os números sorteados na Mega-Sena! Clique no link para brincar: ${domain}`
         );
         const whatsappUrl = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
         window.open(whatsappUrl, "_blank");
 
-        setTimeout(() => {
-          alert(
-            "Após compartilhar, as dezenas serão reveladas! Verifique se o compartilhamento foi feito com sucesso."
-          );
-          document
-            .querySelectorAll(".modal .dezena.blurred")
-            .forEach((dezena) => {
-              dezena.classList.remove("blurred");
-            });
-        }, 3000);
+        const blurredDezenas = document.querySelectorAll(
+          ".modal .dezena.blurred"
+        );
+
+        if (blurredDezenas.length > 0) {
+          blurredDezenas[sharedCount]?.classList.remove("blurred");
+          sharedCount++;
+
+          if (sharedCount >= blurredDezenas.length) {
+            sharedCount = 0;
+          }
+        }
       };
 
       document
         .getElementById("shareButton")
         .addEventListener("click", compartilharParaLiberar);
 
-      // Carregar os sons
       const seletorAudio = new Audio("./moeda.mp3");
       const marcadoAudio = new Audio("./diamante.mp3");
       const modalAudio = new Audio("./ganho.mp3");
 
       const grid = document.getElementById("grid");
+
       for (let i = 1; i <= 60; i++) {
         const number = document.createElement("div");
         number.textContent = i.toString().padStart(2, "0");
@@ -264,6 +276,7 @@
         const dezenasContainer = document.getElementById("dezenas");
 
         dezenasContainer.innerHTML = "";
+
         sorteados.forEach((dezena, index) => {
           const div = document.createElement("div");
           div.textContent = dezena.toString().padStart(2, "0");
