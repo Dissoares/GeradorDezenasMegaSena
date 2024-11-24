@@ -20,18 +20,60 @@
     <style>
       body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
         text-align: center;
-        margin-top: 50px;
         background-color: #f1f1f1;
       }
 
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(10, 40px);
-        gap: 10px;
+      .grid-container {
+        display: flex;
         justify-content: center;
+        overflow: hidden;
         margin-bottom: 20px;
-        transition: filter 0.3s ease;
+      }
+
+      .grid {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .grid > div {
+        width: 40px;
+        height: 40px;
+        background-color: lightgray;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+      }
+
+      @media ((min-width: 1025px) and (max-width: 1920px)) {
+        .grid > div {
+          width: 80px;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .grid > div {
+          width: 50px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .grid > div {
+          width: 60px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .grid > div {
+          width: 70px;
+        }
       }
 
       .grid.blur {
@@ -52,7 +94,7 @@
       }
 
       .number.active {
-        background-color: #ffe680;
+        background-color: #fa1100;
         transform: scale(1.2);
       }
 
@@ -67,14 +109,14 @@
         font-size: 16px;
         border: none;
         border-radius: 5px;
-        background-color: #4caf50;
+        background-color: #104612;
         color: white;
         cursor: pointer;
         transition: background-color 0.3s ease;
       }
 
       button:hover {
-        background-color: #45a049;
+        background-color: #0c9e13;
       }
 
       .modal {
@@ -176,19 +218,53 @@
           transform: translateY(-10px);
         }
       }
+
+      header {
+        background-color: #2c3e50;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 1.8em;
+        color: #2c3e50;
+      }
+
+      #logo {
+        width: auto;
+        height: 250px;
+        margin-left: 0px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      #sorteioButton {
+        width: 250px;
+        height: 50px;
+        margin-bottom: 20px;
+        background-color: #2c3e50;
+      }
+
     </style>
   </head>
 
   <body>
-    <h1>Sorteio Mega-Sena</h1>
-    <div class="grid" id="grid"></div>
+    <header>
+      <img src="./logo.png" alt="Mega-Sena" id="logo" />
+    </header>
+    <div class="grid-container">
+      <div class="grid" id="grid"></div>
+    </div>
     <button id="sorteioButton">Sortear</button>
 
     <div class="overlay" id="overlay"></div>
 
     <div class="modal" id="modal">
-      <h2 id="h2">Dezenas Sorteadas</h2>
-      <p id="frase">Compartilhe no WhatsApp para liberar as dezenas!</p>
+      <h2 id="h2">🍀Dezenas Sorteadas🍀</h2>
+      <p id="frase">Compartilhe no WhatsApp para revelar as dezenas!</p>
       <div id="dezenas"></div>
       <button id="shareButton">Compartilhar no WhatsApp</button>
     </div>
@@ -309,6 +385,15 @@
             sharedCount++;
             coinsAudio.currentTime = 0;
             coinsAudio.play();
+
+            let botaoCompartilhar = document.getElementById("shareButton");
+
+            if (blurredDezenas.length == 3) {
+              botaoCompartilhar.textContent = "😄 Falta pouco!";
+            }
+            if (blurredDezenas.length == 2) {
+              botaoCompartilhar.textContent = "😁 Só mais uma vez!";
+            }
           }, 1000);
 
           if (sharedCount >= blurredDezenas.length) {
@@ -319,7 +404,7 @@
             shareButton.style.display = "none";
 
             const titulo = document.getElementById("h2");
-            titulo.textContent = "Boa Sorte!🍀";
+            titulo.textContent = "🍀Boa Sorte!🍀";
 
             const frases = document.getElementById("frase");
             frases.textContent = "Compartilhamento Concluído!";
@@ -337,7 +422,9 @@
               const dezenasString = dezenas.join(", ");
               navigator.clipboard
                 .writeText(dezenasString)
-                .then(() => (copyButton.textContent = "😃 Copiado com sucesso!"))
+                .then(() => {
+                  copyButton.textContent = "😃 Copiado com sucesso!..";
+                })
                 .catch(() => alert("😖 Erro ao copiar dezenas."));
             });
 
