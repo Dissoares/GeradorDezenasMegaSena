@@ -462,13 +462,6 @@
         }
       };
 
-      const pararFogos = () => {
-        if (fogosInterval) {
-          clearInterval(fogosInterval);
-          fogosInterval = null;
-        }
-      };
-
       document
         .getElementById("shareButton")
         .addEventListener("click", compartilharParaLiberar);
@@ -517,7 +510,7 @@
               marcadoAudio.play();
               resolve();
             }
-          }, 50);
+          }, 70);
         });
       };
 
@@ -544,12 +537,6 @@
         modal.style.display = "block";
 
         modalAudio.play();
-      };
-
-      const fecharModal = () => {
-        document.getElementById("overlay").style.display = "none";
-        document.getElementById("modal").style.display = "none";
-        grid.classList.remove("blur");
       };
 
       const sortear = async () => {
