@@ -15,6 +15,10 @@
     <meta property="og:url" content="https://example.com" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Mega-Sena Sorteios" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      rel="stylesheet"
+    />
 
     <title>Sorteio Mega-Sena</title>
     <style>
@@ -277,15 +281,20 @@
     <div class="grid-container">
       <div class="grid" id="grid"></div>
     </div>
-    <button id="sorteioButton">Sortear</button>
+    
+    <button id="sorteioButton">
+      <i class="fas fa-sync-alt"></i> Sortear
+    </button>
 
     <div class="overlay" id="overlay"></div>
 
     <div class="modal" id="modal">
       <h2 id="h2">🍀Dezenas Sorteadas🍀</h2>
-      <p id="frase">Compartilhe no WhatsApp para revelar as dezenas!</p>
+      <p id="frase">Compartilhe para revelar as dezenas!</p>
       <div id="dezenas"></div>
-      <button id="shareButton">Compartilhar no WhatsApp</button>
+      <button id="shareButton">
+        <i class="fa-brands fa-whatsapp"></i> Compartilhar
+      </button>
     </div>
 
     <script>
@@ -483,7 +492,83 @@
       const sorteioButton = document.getElementById("sorteioButton");
       let sorteados = [];
 
-      const sortearDezena = () => Math.floor(Math.random() * 60) + 1;
+      const frequenciaAnual = [
+        { numero: 1, frequencia: 5 },
+        { numero: 2, frequencia: 8 },
+        { numero: 3, frequencia: 3 },
+        { numero: 4, frequencia: 6 },
+        { numero: 5, frequencia: 7 },
+        { numero: 6, frequencia: 4 },
+        { numero: 7, frequencia: 6 },
+        { numero: 8, frequencia: 5 },
+        { numero: 9, frequencia: 3 },
+        { numero: 10, frequencia: 4 },
+        { numero: 11, frequencia: 7 },
+        { numero: 12, frequencia: 6 },
+        { numero: 13, frequencia: 5 },
+        { numero: 14, frequencia: 8 },
+        { numero: 15, frequencia: 3 },
+        { numero: 16, frequencia: 2 },
+        { numero: 17, frequencia: 4 },
+        { numero: 18, frequencia: 6 },
+        { numero: 19, frequencia: 5 },
+        { numero: 20, frequencia: 7 },
+        { numero: 21, frequencia: 4 },
+        { numero: 22, frequencia: 5 },
+        { numero: 23, frequencia: 6 },
+        { numero: 24, frequencia: 3 },
+        { numero: 25, frequencia: 4 },
+        { numero: 26, frequencia: 2 },
+        { numero: 27, frequencia: 7 },
+        { numero: 28, frequencia: 6 },
+        { numero: 29, frequencia: 5 },
+        { numero: 30, frequencia: 4 },
+        { numero: 31, frequencia: 3 },
+        { numero: 32, frequencia: 6 },
+        { numero: 33, frequencia: 5 },
+        { numero: 34, frequencia: 4 },
+        { numero: 35, frequencia: 6 },
+        { numero: 36, frequencia: 3 },
+        { numero: 37, frequencia: 5 },
+        { numero: 38, frequencia: 7 },
+        { numero: 39, frequencia: 4 },
+        { numero: 40, frequencia: 3 },
+        { numero: 41, frequencia: 6 },
+        { numero: 42, frequencia: 5 },
+        { numero: 43, frequencia: 4 },
+        { numero: 44, frequencia: 6 },
+        { numero: 45, frequencia: 7 },
+        { numero: 46, frequencia: 5 },
+        { numero: 47, frequencia: 3 },
+        { numero: 48, frequencia: 4 },
+        { numero: 49, frequencia: 6 },
+        { numero: 50, frequencia: 5 },
+        { numero: 51, frequencia: 4 },
+        { numero: 52, frequencia: 3 },
+        { numero: 53, frequencia: 7 },
+        { numero: 54, frequencia: 6 },
+        { numero: 55, frequencia: 5 },
+        { numero: 56, frequencia: 4 },
+        { numero: 57, frequencia: 3 },
+        { numero: 58, frequencia: 5 },
+        { numero: 59, frequencia: 6 },
+        { numero: 60, frequencia: 4 },
+      ];
+
+      const sortearDezena = () => {
+        const listaNumerosBaseadaEmFrequencia = [];
+
+        frequenciaAnual.forEach((item) => {
+          for (let i = 0; i < item.frequencia; i++) {
+            listaNumerosBaseadaEmFrequencia.push(item.numero);
+          }
+        });
+
+        const indiceAleatorio = Math.floor(
+          Math.random() * listaNumerosBaseadaEmFrequencia.length
+        );
+        return listaNumerosBaseadaEmFrequencia[indiceAleatorio];
+      };
 
       const animarSelecao = (numeroSorteado) => {
         return new Promise((resolve) => {
