@@ -281,10 +281,8 @@
     <div class="grid-container">
       <div class="grid" id="grid"></div>
     </div>
-    
-    <button id="sorteioButton">
-      <i class="fas fa-sync-alt"></i> Sortear
-    </button>
+
+    <button id="sorteioButton"><i class="fas fa-sync-alt"></i> Sortear</button>
 
     <div class="overlay" id="overlay"></div>
 
@@ -493,69 +491,77 @@
       let sorteados = [];
 
       const frequenciaAnual = [
-        { numero: 1, frequencia: 5 },
-        { numero: 2, frequencia: 8 },
-        { numero: 3, frequencia: 3 },
-        { numero: 4, frequencia: 6 },
-        { numero: 5, frequencia: 7 },
-        { numero: 6, frequencia: 4 },
-        { numero: 7, frequencia: 6 },
-        { numero: 8, frequencia: 5 },
-        { numero: 9, frequencia: 3 },
-        { numero: 10, frequencia: 4 },
-        { numero: 11, frequencia: 7 },
-        { numero: 12, frequencia: 6 },
-        { numero: 13, frequencia: 5 },
-        { numero: 14, frequencia: 8 },
-        { numero: 15, frequencia: 3 },
-        { numero: 16, frequencia: 2 },
-        { numero: 17, frequencia: 4 },
-        { numero: 18, frequencia: 6 },
-        { numero: 19, frequencia: 5 },
-        { numero: 20, frequencia: 7 },
-        { numero: 21, frequencia: 4 },
-        { numero: 22, frequencia: 5 },
-        { numero: 23, frequencia: 6 },
-        { numero: 24, frequencia: 3 },
-        { numero: 25, frequencia: 4 },
-        { numero: 26, frequencia: 2 },
-        { numero: 27, frequencia: 7 },
-        { numero: 28, frequencia: 6 },
-        { numero: 29, frequencia: 5 },
-        { numero: 30, frequencia: 4 },
-        { numero: 31, frequencia: 3 },
-        { numero: 32, frequencia: 6 },
-        { numero: 33, frequencia: 5 },
-        { numero: 34, frequencia: 4 },
-        { numero: 35, frequencia: 6 },
-        { numero: 36, frequencia: 3 },
-        { numero: 37, frequencia: 5 },
-        { numero: 38, frequencia: 7 },
-        { numero: 39, frequencia: 4 },
-        { numero: 40, frequencia: 3 },
-        { numero: 41, frequencia: 6 },
-        { numero: 42, frequencia: 5 },
-        { numero: 43, frequencia: 4 },
-        { numero: 44, frequencia: 6 },
-        { numero: 45, frequencia: 7 },
-        { numero: 46, frequencia: 5 },
-        { numero: 47, frequencia: 3 },
-        { numero: 48, frequencia: 4 },
-        { numero: 49, frequencia: 6 },
-        { numero: 50, frequencia: 5 },
-        { numero: 51, frequencia: 4 },
-        { numero: 52, frequencia: 3 },
-        { numero: 53, frequencia: 7 },
-        { numero: 54, frequencia: 6 },
-        { numero: 55, frequencia: 5 },
-        { numero: 56, frequencia: 4 },
-        { numero: 57, frequencia: 3 },
-        { numero: 58, frequencia: 5 },
-        { numero: 59, frequencia: 6 },
-        { numero: 60, frequencia: 4 },
+        { numero: 1, frequencia: 268 },
+        { numero: 2, frequencia: 279 },
+        { numero: 3, frequencia: 262 },
+        { numero: 4, frequencia: 293 },
+        { numero: 5, frequencia: 302 },
+        { numero: 6, frequencia: 281 },
+        { numero: 7, frequencia: 266 },
+        { numero: 8, frequencia: 276 },
+        { numero: 9, frequencia: 265 },
+        { numero: 10, frequencia: 328 },
+        { numero: 11, frequencia: 295 },
+        { numero: 12, frequencia: 266 },
+        { numero: 13, frequencia: 287 },
+        { numero: 14, frequencia: 272 },
+        { numero: 15, frequencia: 239 },
+        { numero: 16, frequencia: 292 },
+        { numero: 17, frequencia: 294 },
+        { numero: 18, frequencia: 269 },
+        { numero: 19, frequencia: 269 },
+        { numero: 20, frequencia: 276 },
+        { numero: 21, frequencia: 234 },
+        { numero: 22, frequencia: 252 },
+        { numero: 23, frequencia: 298 },
+        { numero: 24, frequencia: 277 },
+        { numero: 25, frequencia: 278 },
+        { numero: 26, frequencia: 233 },
+        { numero: 27, frequencia: 292 },
+        { numero: 28, frequencia: 290 },
+        { numero: 29, frequencia: 282 },
+        { numero: 30, frequencia: 297 },
+        { numero: 31, frequencia: 258 },
+        { numero: 32, frequencia: 296 },
+        { numero: 33, frequencia: 302 },
+        { numero: 34, frequencia: 304 },
+        { numero: 35, frequencia: 297 },
+        { numero: 36, frequencia: 283 },
+        { numero: 37, frequencia: 302 },
+        { numero: 38, frequencia: 297 },
+        { numero: 39, frequencia: 266 },
+        { numero: 40, frequencia: 262 },
+        { numero: 41, frequencia: 295 },
+        { numero: 42, frequencia: 299 },
+        { numero: 43, frequencia: 294 },
+        { numero: 44, frequencia: 298 },
+        { numero: 45, frequencia: 277 },
+        { numero: 46, frequencia: 290 },
+        { numero: 47, frequencia: 268 },
+        { numero: 48, frequencia: 259 },
+        { numero: 49, frequencia: 286 },
+        { numero: 50, frequencia: 274 },
+        { numero: 51, frequencia: 284 },
+        { numero: 52, frequencia: 281 },
+        { numero: 53, frequencia: 319 },
+        { numero: 54, frequencia: 287 },
+        { numero: 55, frequencia: 237 },
+        { numero: 56, frequencia: 289 },
+        { numero: 57, frequencia: 268 },
+        { numero: 58, frequencia: 271 },
+        { numero: 59, frequencia: 273 },
+        { numero: 60, frequencia: 267 },
       ];
 
       const sortearDezena = () => {
+        const listaOrdenada = frequenciaAnual.sort(
+          (a, b) => b.frequencia - a.frequencia
+        );
+
+        const numerosMaisFrequentes = listaOrdenada
+          .slice(0, 10)
+          .map((item) => item.numero);
+
         const listaNumerosBaseadaEmFrequencia = [];
 
         frequenciaAnual.forEach((item) => {
@@ -564,10 +570,30 @@
           }
         });
 
-        const indiceAleatorio = Math.floor(
-          Math.random() * listaNumerosBaseadaEmFrequencia.length
-        );
-        return listaNumerosBaseadaEmFrequencia[indiceAleatorio];
+        const sorteioMaisFrequentes = [];
+        for (let i = 0; i < 3; i++) {
+          const indice = Math.floor(
+            Math.random() * numerosMaisFrequentes.length
+          );
+          sorteioMaisFrequentes.push(numerosMaisFrequentes[indice]);
+          numerosMaisFrequentes.splice(indice, 1);
+        }
+
+        const sorteioAleatorio = [];
+        for (let i = 0; i < 3; i++) {
+          const indiceAleatorio = Math.floor(
+            Math.random() * listaNumerosBaseadaEmFrequencia.length
+          );
+          sorteioAleatorio.push(
+            listaNumerosBaseadaEmFrequencia[indiceAleatorio]
+          );
+          listaNumerosBaseadaEmFrequencia.splice(indiceAleatorio, 1);
+        }
+
+        const resultadoFinal = [...sorteioMaisFrequentes, ...sorteioAleatorio];
+
+        const indiceFinal = Math.floor(Math.random() * resultadoFinal.length);
+        return resultadoFinal[indiceFinal];
       };
 
       const animarSelecao = (numeroSorteado) => {
@@ -633,6 +659,7 @@
           let numero;
           do {
             numero = sortearDezena();
+            console.log("💡 => sortear => numero:", numero);
           } while (sorteados.includes(numero));
 
           sorteados.push(numero);
