@@ -194,7 +194,100 @@
     </div>
 
     <script>
+      const coinsAudio = new Audio("./coins.mp3");
+      const audioFogos = new Audio("./fogos.mp3");
       let sharedCount = 0;
+
+      const metodoFogos = () => {
+        const canvas = document.createElement("canvas");
+        canvas.style.position = "fixed";
+        canvas.style.top = 0;
+        canvas.style.left = 0;
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.zIndex = 9999;
+        canvas.style.pointerEvents = "none";
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext("2d");
+        const fireworks = [];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const random = (min, max) => Math.random() * (max - min) + min;
+
+        class FireworkParticle {
+          constructor(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.radius = random(2, 4);
+            this.color = color;
+            this.alpha = 1;
+            this.speedX = random(-3, 3);
+            this.speedY = random(-3, 3);
+          }
+
+          update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.alpha -= 0.02;
+          }
+
+          draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+          }
+        }
+
+        const createFirework = (x, y) => {
+          const colors = [
+            "#ff5050",
+            "#ffac33",
+            "#33cc33",
+            "#3399ff",
+            "#9900cc",
+          ];
+          for (let i = 0; i < 50; i++) {
+            fireworks.push(
+              new FireworkParticle(
+                x,
+                y,
+                colors[Math.floor(Math.random() * colors.length)]
+              )
+            );
+          }
+        };
+
+        const animate = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          fireworks.forEach((particle, index) => {
+            particle.update();
+            particle.draw();
+            if (particle.alpha <= 0) {
+              fireworks.splice(index, 1);
+            }
+          });
+
+          if (fireworks.length === 0) {
+            document.body.removeChild(canvas); 
+          } else {
+            requestAnimationFrame(animate);
+          }
+        };
+
+        for (let i = 0; i < 5; i++) {
+          createFirework(
+            random(canvas.width * 0.4, canvas.width * 0.6),
+            random(canvas.height * 0.4, canvas.height * 0.6)
+          );
+        }
+
+        animate();
+      };
 
       const compartilharParaLiberar = () => {
         const domain = window.location.origin;
@@ -209,12 +302,21 @@
         );
 
         if (blurredDezenas.length > 0) {
-          blurredDezenas[sharedCount]?.classList.remove("blurred");
-          sharedCount++;
+          setTimeout(() => {
+            blurredDezenas[sharedCount]?.classList.remove("blurred");
+            sharedCount++;
+            coinsAudio.currentTime = 0;
+            coinsAudio.play();
+          }, 1000);
 
           if (sharedCount >= blurredDezenas.length) {
             sharedCount = 0;
           }
+
+          metodoFogos();
+          audioFogos.currentTime = 0;
+          audioFogos.play();
+
         }
       };
 
