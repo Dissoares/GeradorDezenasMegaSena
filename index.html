@@ -126,12 +126,15 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: #fff;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         border-radius: 12px;
         padding: 20px;
         text-align: center;
-        z-index: 1000;
+        z-index: 1001;
         animation: fadeIn 0.4s ease-in-out;
+        width: 90%;
+        max-width: 600px;
+        overflow: auto;
       }
 
       .overlay {
@@ -142,7 +145,21 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.6);
-        z-index: 999;
+        z-index: 1000;
+      }
+
+      @media (max-width: 768px) {
+        .modal {
+          width: 90%;
+          max-width: 400px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .modal {
+          width: 95%;
+          max-width: 350px;
+        }
       }
 
       .modal h2 {
@@ -163,7 +180,6 @@
         font-weight: bold;
         color: #4caf50;
         margin: 5px;
-        animation: bounce 0.6s ease infinite;
         padding: 10px;
         border-radius: 8px;
         background-color: #f1f1f1;
@@ -248,6 +264,9 @@
         background-color: #2c3e50;
       }
 
+      #dezenas {
+        margin-bottom: 10px;
+      }
     </style>
   </head>
 
@@ -431,6 +450,10 @@
             if (!fogosInterval) {
               fogosInterval = setInterval(() => {
                 metodoFogos();
+                const dezenas = document.querySelectorAll(".dezena");
+                dezenas.forEach((dezena) => {
+                  dezena.style.animation = "bounce 0.6s ease infinite";
+                });
                 audioFogos.currentTime = 0;
                 audioFogos.play();
               }, 2000);
